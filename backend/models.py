@@ -10,7 +10,7 @@ class Usuario(Base):
     nombre_completo = Column(String, nullable=False)
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
-    rol = Column(String, default="cliente") # <--- AQUÍ ESTÁ LA NUEVA COLUMNA
+    rol = Column(String, default="cliente")
     fecha_registro = Column(DateTime, default=datetime.utcnow)
 
     tickets = relationship("Ticket", back_populates="usuario")

@@ -3,7 +3,7 @@ from typing import Optional
 from datetime import datetime
 from enum import Enum
 
-# --- ESQUEMAS DE USUARIO ---
+
 class UsuarioCreate(BaseModel):
     nombre_completo: str
     email: EmailStr  
@@ -18,7 +18,7 @@ class UsuarioResponse(BaseModel):
     class Config:
         from_attributes = True
 
-# Nuevo mini-esquema para anidarlo dentro del ticket
+
 class UsuarioBasico(BaseModel):
     nombre_completo: str
     email: str
@@ -26,7 +26,7 @@ class UsuarioBasico(BaseModel):
     class Config:
         from_attributes = True
 
-# --- ESQUEMAS DE TICKET ---
+
 class TicketStatusEnum(str, Enum):
     NUEVO = "NUEVO"
     ABIERTO = "ABIERTO"
@@ -49,7 +49,7 @@ class TicketResponse(BaseModel):
     estado: str
     fecha_creacion: datetime
     usuario_id: Optional[int] = None
-    # ¡Aquí agregamos la información del usuario creador!
+    
     usuario: Optional[UsuarioBasico] = None 
 
     class Config:

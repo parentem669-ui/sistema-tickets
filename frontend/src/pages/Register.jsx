@@ -19,20 +19,20 @@ function Register() {
   const manejarRegistro = async (e) => {
     e.preventDefault()
     try {
-      // 1. Guardamos al usuario en la base de datos
+      
       const response = await axios.post('http://127.0.0.1:8000/registro', {
         nombre_completo: nombre,
         email: email,
         password: password
       })
       
-      // 2. Guardamos la sesión automáticamente en el navegador
+      
       localStorage.setItem('usuario', JSON.stringify(response.data))
 
-      // 3. Mostramos la notificación
+      
       mostrarNotificacion("✓ Cuenta creada exitosamente. Redirigiendo...", 'exito')
       
-      // 4. Redirigimos al Dashboard después de 2 segundos
+      
       setTimeout(() => {
         navigate('/dashboard')
       }, 2000)

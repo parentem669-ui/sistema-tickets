@@ -8,12 +8,12 @@ import models
 import schemas
 from database import engine, SessionLocal
 
-# Creamos las tablas en la base de datos si no existen
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Sistema de Soporte Técnico")
 
-# Configuración de CORS para permitir que React se conecte
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], 
@@ -22,7 +22,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Dependencia para obtener la sesión de la base de datos
+
 def get_db():
     db = SessionLocal()
     try:
@@ -31,9 +31,7 @@ def get_db():
         db.close()
 
 
-# ==========================================
-# RUTAS DE AUTENTICACIÓN (USUARIOS)
-# ==========================================
+
 
 @app.post("/registro", response_model=schemas.UsuarioResponse)
 def registrar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_db)):
@@ -41,13 +39,12 @@ def registrar_usuario(usuario: schemas.UsuarioCreate, db: Session = Depends(get_
     if db_usuario:
         raise HTTPException(status_code=400, detail="El correo ya está registrado")
     
-    # SEGURIDAD CORREGIDA: Todo nuevo registro es un "cliente" normal por defecto.
-    # Nadie puede hacerse administrador a sí mismo desde la pantalla de registro.
+   
     nuevo_usuario = models.Usuario(
         nombre_completo=usuario.nombre_completo,
         email=usuario.email,
         password=usuario.password,
-        rol="cliente" # <--- Ahora es estricto
+        rol="cliente" 
     )
     db.add(nuevo_usuario)
     db.commit()
@@ -69,7 +66,6 @@ def iniciar_sesion(credenciales: LoginRequest, db: Session = Depends(get_db)):
             detail="Correo o contraseña incorrectos."
         )
     
-    # Retornamos los datos al frontend, ¡ahora incluyendo el ROL!
     return {
         "id": usuario.id,
         "nombre": usuario.nombre_completo,
@@ -78,15 +74,13 @@ def iniciar_sesion(credenciales: LoginRequest, db: Session = Depends(get_db)):
     }
 
 
-# ==========================================
-# RUTAS DE TICKETS (REQUERIMIENTOS)
-# ==========================================
+
 
 @app.get("/tickets", response_model=list[schemas.TicketResponse])
 def obtener_tickets(usuario_id: Optional[int] = None, db: Session = Depends(get_db)):
     query = db.query(models.Ticket)
     
-    # Filtro para que el cliente solo vea sus tickets
+    
     if usuario_id:
         query = query.filter(models.Ticket.usuario_id == usuario_id)
         

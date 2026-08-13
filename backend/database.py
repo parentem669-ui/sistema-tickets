@@ -11,7 +11,7 @@ engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# Inyección de dependencia para obtener la sesión DB
+
 def get_db():
     db = SessionLocal()
     try:

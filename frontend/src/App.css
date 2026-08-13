@@ -140,7 +140,7 @@ body, html, #root {
 .btn-submit {
   width: 100%;
   padding: 16px;
-  background-color: #8b5cf6; /* Púrpura corporativo */
+  background-color: #8b5cf6; 
   color: white;
   border: none;
   border-radius: 6px;
@@ -154,12 +154,12 @@ body, html, #root {
   background-color: #7c3aed;
 }
 
-/* Notificación Toast Flotante */
+
 .toast-notification {
   position: fixed;
   top: 24px;
   right: 24px;
-  background-color: #10b981; /* Verde para éxito */
+  background-color: #10b981; 
   color: white;
   padding: 16px 24px;
   border-radius: 8px;
@@ -174,7 +174,7 @@ body, html, #root {
 }
 
 .toast-notification.error {
-  background-color: #ef4444; /* Rojo para error */
+  background-color: #ef4444; 
 }
 
 @keyframes slideIn {
@@ -188,7 +188,7 @@ body, html, #root {
   }
 }
 
-/* Adaptación para móviles */
+
 @media (max-width: 900px) {
   .landing-container {
     flex-direction: column;

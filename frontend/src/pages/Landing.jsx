@@ -7,12 +7,12 @@ function Landing() {
   const [titulo, setTitulo] = useState('')
   const [descripcion, setDescripcion] = useState('')
   
-  // Estado para controlar la notificación visual
+  
   const [notificacion, setNotificacion] = useState(null)
 
   const mostrarNotificacion = (mensaje, tipo = 'exito') => {
     setNotificacion({ mensaje, tipo })
-    // Desaparece automáticamente después de 3.5 segundos
+    
     setTimeout(() => {
       setNotificacion(null)
     }, 3500)
@@ -21,14 +21,14 @@ function Landing() {
   const manejarEnvio = async (e) => {
     e.preventDefault()
     try {
-      // Obtenemos los datos del usuario logueado
+      
       const usuarioGuardado = localStorage.getItem('usuario')
       const usuario = usuarioGuardado ? JSON.parse(usuarioGuardado) : null
 
       await axios.post('http://127.0.0.1:8000/tickets', {
         titulo: titulo,
         descripcion: descripcion,
-        usuario_id: usuario ? usuario.id : null // Enviamos el ID si está logueado
+        usuario_id: usuario ? usuario.id : null 
       })
       
       mostrarNotificacion("✓ Ticket registrado con éxito", 'exito')
@@ -43,7 +43,7 @@ function Landing() {
   return (
     <div className="landing-container">
       
-      {/* Componente de Notificación Flotante */}
+      
       {notificacion && (
         <div className={`toast-notification ${notificacion.tipo}`}>
           {notificacion.mensaje}
