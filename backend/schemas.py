@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 from enum import Enum
 
@@ -13,18 +13,35 @@ class UsuarioResponse(BaseModel):
     id: int
     nombre_completo: str
     email: EmailStr
+    rol: str
     fecha_registro: datetime
 
     class Config:
         from_attributes = True
 
-
 class UsuarioBasico(BaseModel):
     nombre_completo: str
     email: str
+    rol: str
 
     class Config:
         from_attributes = True
+
+
+
+class ComentarioCreate(BaseModel):
+    texto: str
+    usuario_id: int
+
+class ComentarioResponse(BaseModel):
+    id: int
+    texto: str
+    fecha_creacion: datetime
+    usuario: UsuarioBasico 
+
+    class Config:
+        from_attributes = True
+
 
 
 class TicketStatusEnum(str, Enum):
@@ -49,8 +66,10 @@ class TicketResponse(BaseModel):
     estado: str
     fecha_creacion: datetime
     usuario_id: Optional[int] = None
+    usuario: Optional[UsuarioBasico] = None
     
-    usuario: Optional[UsuarioBasico] = None 
+    
+    comentarios: List[ComentarioResponse] = [] 
 
     class Config:
         from_attributes = True

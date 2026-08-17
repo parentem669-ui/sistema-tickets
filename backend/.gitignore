@@ -1,0 +1,29 @@
+# ========================
+# Entornos Virtuales
+# ========================
+venv/
+env/
+
+# ========================
+# Caché de Python
+# ========================
+__pycache__/
+*.pyc
+
+# ========================
+# Variables de Entorno y Secretos
+# ========================
+.env
+
+# ========================
+# Frontend (React / Node)
+# ========================
+node_modules/
+dist/
+.eslintcache
+
+# ========================
+# Archivos del Sistema Operativo
+# ========================
+.DS_Store
+Thumbs.db
