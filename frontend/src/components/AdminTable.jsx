@@ -17,22 +17,31 @@ function AdminTable({ tickets, cambiarEstado, setTicketChat, handleEliminarTicke
           {tickets.map(ticket => (
             <tr key={ticket.id} style={{ borderBottom: '1px solid #eee' }}>
               <td style={{ padding: '12px', fontWeight: 'bold', color: '#6a4cff' }}>#{ticket.id}</td>
+              
+              {/* CORRECCIÓN DE CLIENTE AQUÍ */}
               <td style={{ padding: '12px' }}>
-                {ticket.usuario ? (
+                {ticket.cliente ? (
+                  <div style={{ fontWeight: 'bold', fontSize: '14px', color: '#1e293b' }}>
+                    {ticket.cliente}
+                  </div>
+                ) : ticket.usuario ? (
                   <>
                     <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{ticket.usuario.nombre_completo}</div>
                     <div style={{ color: '#888', fontSize: '12px' }}>{ticket.usuario.email}</div>
                   </>
                 ) : (
-                  <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '14px' }}>Sin asignar</span>
+                  <span style={{ color: '#94a3b8', fontStyle: 'italic', fontSize: '14px' }}>
+                    Usuario #{ticket.usuario_id || 'Sin asignar'}
+                  </span>
                 )}
               </td>
+
               <td style={{ padding: '12px' }}>
                 <strong>{ticket.titulo}</strong>
                 <div style={{ color: '#666', fontSize: '13px', marginTop: '4px' }}>{ticket.descripcion}</div>
               </td>
               <td style={{ padding: '12px', color: '#64748b', fontSize: '13px' }}>
-                {formatearFecha(ticket.fecha_creacion)}
+                {formatearFecha ? formatearFecha(ticket.fecha_creacion) : ticket.fecha_creacion}
               </td>
               <td style={{ padding: '12px' }}>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
