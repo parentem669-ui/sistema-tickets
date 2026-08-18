@@ -1,54 +1,82 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from typing import Optional
+from flask import Blueprint, request, jsonify
+from models import db, Ticket, Comentario
+from extensions import limiter
 
-import models
-import schemas
-from database import get_db
+tickets_bp = Blueprint('tickets', __name__)
 
-
-router = APIRouter(prefix="/tickets", tags=["Gestión de Tickets"])
-
-@router.get("", response_model=list[schemas.TicketResponse])
-def obtener_tickets(usuario_id: Optional[int] = None, db: Session = Depends(get_db)):
-    query = db.query(models.Ticket)
-    
+@tickets_bp.route('/tickets', methods=['GET'])
+def obtener_tickets():
+    usuario_id = request.args.get('usuario_id')
     if usuario_id:
-        query = query.filter(models.Ticket.usuario_id == usuario_id)
+        tickets = Ticket.query.filter_by(usuario_id=usuario_id).order_by(Ticket.fecha_creacion.desc()).all()
+    else:
+        tickets = Ticket.query.order_by(Ticket.fecha_creacion.desc()).all()
+    return jsonify([ticket.to_dict() for ticket in tickets]), 200
+
+@tickets_bp.route('/tickets', methods=['POST'])
+@limiter.limit("3 per minute")
+def crear_ticket():
+    datos = request.get_json()
+    titulo = datos.get('titulo')
+    descripcion = datos.get('descripcion')
+    usuario_id = datos.get('usuario_id')
+    
+    if not titulo or not descripcion or not usuario_id:
+        return jsonify({"error": "Faltan campos obligatorios"}), 400
         
-    return query.all()
-
-@router.post("", response_model=schemas.TicketResponse, status_code=status.HTTP_201_CREATED)
-def crear_ticket(ticket: schemas.TicketCreate, db: Session = Depends(get_db)):
-    nuevo_ticket = models.Ticket(
-        titulo=ticket.titulo,
-        descripcion=ticket.descripcion,
-        usuario_id=ticket.usuario_id
+    nuevo_ticket = Ticket(
+        titulo=titulo,
+        descripcion=descripcion,
+        usuario_id=usuario_id,
+        estado='PENDIENTE'
     )
-    db.add(nuevo_ticket)
-    db.commit()
-    db.refresh(nuevo_ticket)
-    return nuevo_ticket
+    db.session.add(nuevo_ticket)
+    db.session.commit()
+    return jsonify(nuevo_ticket.to_dict()), 201
 
-@router.put("/{ticket_id}/estado", response_model=schemas.TicketResponse)
-def actualizar_estado_ticket(ticket_id: int, estado_data: schemas.TicketUpdateStatus, db: Session = Depends(get_db)):
-    ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
+@tickets_bp.route('/tickets/<int:id>/estado', methods=['PUT'])
+def actualizar_estado(id):
+    ticket = Ticket.query.get_or_404(id)
+    datos = request.get_json()
     
-    if not ticket:
-        raise HTTPException(status_code=404, detail="Ticket no encontrado")
+    nuevo_estado = datos.get('nuevo_estado') or datos.get('estado')
     
-    ticket.estado = estado_data.nuevo_estado
-    db.commit()
-    db.refresh(ticket)
-    return ticket
+    if not nuevo_estado:
+        return jsonify({"error": "Estado no proporcionado"}), 400
 
-@router.delete("/{ticket_id}")
-def eliminar_ticket(ticket_id: int, db: Session = Depends(get_db)):
-    ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
+    if ticket.estado == 'CERRADO':
+        return jsonify({"error": "Este ticket ya está CERRADO y no se puede modificar su estado"}), 400
+
+    ticket.estado = nuevo_estado
+    db.session.commit()
+    return jsonify(ticket.to_dict()), 200
+
+@tickets_bp.route('/tickets/<int:id>', methods=['DELETE'])
+def eliminar_ticket(id):
+    ticket = Ticket.query.get_or_404(id)
+    db.session.delete(ticket)
+    db.session.commit()
+    return jsonify({"mensaje": "Ticket eliminado"}), 200
+
+@tickets_bp.route('/tickets/<int:id>/comentarios', methods=['POST'])
+def agregar_comentario(id):
+    ticket = Ticket.query.get_or_404(id)
     
-    if not ticket:
-        raise HTTPException(status_code=404, detail="Ticket no encontrado")
+    if ticket.estado == 'CERRADO':
+        return jsonify({"error": "No se pueden agregar comentarios a un ticket CERRADO"}), 400
+
+    datos = request.get_json()
+    contenido = datos.get('contenido')
+    usuario_id = datos.get('usuario_id')
     
-    db.delete(ticket)
-    db.commit()
-    return {"mensaje": "Ticket eliminado exitosamente"}
+    if not contenido or not usuario_id:
+        return jsonify({"error": "Faltan datos"}), 400
+        
+    nuevo_comentario = Comentario(
+        contenido=contenido,
+        usuario_id=usuario_id,
+        ticket_id=ticket.id
+    )
+    db.session.add(nuevo_comentario)
+    db.session.commit()
+    return jsonify(nuevo_comentario.to_dict()), 201

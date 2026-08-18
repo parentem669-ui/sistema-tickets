@@ -1,48 +1,65 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import relationship
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from database import Base
 
-class Usuario(Base):
-    __tablename__ = "usuarios"
+db = SQLAlchemy()
 
-    id = Column(Integer, primary_key=True, index=True)
-    nombre_completo = Column(String, nullable=False)
-    email = Column(String, unique=True, index=True, nullable=False)
-    password = Column(String, nullable=False)
-    rol = Column(String, default="cliente") 
-    fecha_registro = Column(DateTime, default=datetime.utcnow)
+class Usuario(db.Model):
+    __tablename__ = 'usuarios'
+    id = db.Column(db.Integer, primary_key=True)
+    nombre_completo = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    password = db.Column(db.String(200), nullable=False)
+    rol = db.Column(db.String(20), default='cliente')
 
-    tickets = relationship("Ticket", back_populates="usuario")
-
-
-class Ticket(Base):
-    __tablename__ = "tickets"
-
-    id = Column(Integer, primary_key=True, index=True)
-    titulo = Column(String, index=True, nullable=False)
-    descripcion = Column(String, nullable=False)
-    estado = Column(String, default="NUEVO")
-    fecha_creacion = Column(DateTime, default=datetime.utcnow)
+class Ticket(db.Model):
+    __tablename__ = 'tickets'
+    id = db.Column(db.Integer, primary_key=True)
+    titulo = db.Column(db.String(150), nullable=False)
+    descripcion = db.Column(db.Text, nullable=False)
+    estado = db.Column(db.String(20), default='PENDIENTE')
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     
-    usuario_id = Column(Integer, ForeignKey("usuarios.id"))
+    # 1. Agregamos esta relación para poder acceder a los datos del usuario
+    autor = db.relationship('Usuario', backref='tickets_creados')
+    comentarios = db.relationship('Comentario', backref='ticket', lazy=True, cascade="all, delete-orphan")
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'titulo': self.titulo,
+            'descripcion': self.descripcion,
+            'estado': self.estado,
+            'usuario_id': self.usuario_id,
+            # 2. AQUÍ ESTÁ LA MAGIA: Mandamos el nombre real a React
+            'cliente': self.autor.nombre_completo if self.autor else 'Desconocido', 
+            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
+            'comentarios': [c.to_dict() for c in self.comentarios] if hasattr(self, 'comentarios') else []
+        }
+
+class Comentario(db.Model):
+    __tablename__ = 'comentarios'
     
-    usuario = relationship("Usuario", back_populates="tickets")
-    
-    comentarios = relationship("Comentario", back_populates="ticket", cascade="all, delete-orphan")
+    id = db.Column(db.Integer, primary_key=True)
+    contenido = db.Column(db.Text, nullable=False)
+    fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
+    usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
+    ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
 
+    # MAGIA AQUÍ: Relacionamos el comentario con el usuario que lo escribió
+    autor = db.relationship('Usuario', backref='comentarios_escritos')
 
-
-class Comentario(Base):
-    __tablename__ = "comentarios"
-
-    id = Column(Integer, primary_key=True, index=True)
-    texto = Column(String, nullable=False)
-    fecha_creacion = Column(DateTime, default=datetime.utcnow)
-    
-    ticket_id = Column(Integer, ForeignKey("tickets.id"))
-    usuario_id = Column(Integer, ForeignKey("usuarios.id"))
-
-    
-    ticket = relationship("Ticket", back_populates="comentarios")
-    usuario = relationship("Usuario")
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'contenido': self.contenido,
+            'usuario_id': self.usuario_id,
+            'ticket_id': self.ticket_id,
+            'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
+            # Mandamos el objeto "usuario" completo para que React pueda leer el nombre y rol
+            'usuario': {
+                'id': self.autor.id if self.autor else self.usuario_id,
+                'nombre_completo': self.autor.nombre_completo if self.autor else 'Usuario Desconocido',
+                'rol': self.autor.rol if self.autor else 'N/A'
+            } if hasattr(self, 'autor') else None
+        }
