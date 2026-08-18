@@ -23,7 +23,7 @@ export const useAdmin = () => {
     }
   }
 
- useEffect(() => {
+  useEffect(() => {
     fetchTickets()
   }, [])
 
@@ -66,6 +66,7 @@ export const useAdmin = () => {
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario')
+    localStorage.removeItem('token') // <-- AGREGADO: Limpiamos el token al salir
     navigate('/login')
   }
 

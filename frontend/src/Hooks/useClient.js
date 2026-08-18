@@ -12,13 +12,11 @@ export const useClient = () => {
 
   const navigate = useNavigate()
   
-  // Como ProtectedRoute ya se aseguró de que nadie pase sin iniciar sesión, 
-  // podemos leer la memoria con toda confianza:
   const usuarioActual = JSON.parse(localStorage.getItem('usuario'))
 
   const fetchTickets = async () => {
     try {
-      const data = await obtenerTickets(usuarioActual.id)
+      const data = await obtenerTickets(usuarioActual?.id)
       setTickets(data)
       if (ticketChat) {
         const ticketActualizado = data.find(t => t.id === ticketChat.id)
@@ -61,7 +59,8 @@ export const useClient = () => {
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario')
-    navigate('/login') // Aquí sí usamos navigate porque el usuario está saliendo por su cuenta
+    localStorage.removeItem('token') // <-- AGREGADO: Limpiamos el token al salir
+    navigate('/login')
   }
 
   return {

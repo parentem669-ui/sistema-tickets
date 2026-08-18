@@ -21,14 +21,22 @@ function Login() {
     e.preventDefault()
     try {
       const usuario = await iniciarSesion(email, password)
+      
+      // Guardamos la info del usuario
       localStorage.setItem('usuario', JSON.stringify(usuario))
-      navigate(usuario.rol === 'admin' ? '/admin' : '/dashboard')
+      
+      // Redirección
+      navigate(usuario.rol === 'admin' || usuario.rol === 'staff' ? '/admin' : '/dashboard')
     } catch (error) {
-      Swal.fire({ icon: 'error', title: 'Acceso Denegado', text: 'Correo o contraseña incorrectos.', confirmButtonColor: '#6366f1' })
+      Swal.fire({ 
+        icon: 'error', 
+        title: 'Acceso Denegado', 
+        text: 'Correo o contraseña incorrectos.', 
+        confirmButtonColor: '#6366f1' 
+      })
     }
   }
 
-  // CERO HTML PURO:
   return (
     <AuthLayout titulo="Iniciar Sesión">
       
