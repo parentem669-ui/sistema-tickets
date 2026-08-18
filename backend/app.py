@@ -1,7 +1,13 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_jwt_extended import JWTManager # <-- 1. Importar JWT
 
 app = Flask(__name__)
+
+# Configuración JWT (Evita el error KeyError)
+app.config['JWT_SECRET_KEY'] = 'clave-secreta-tickets'
+app.config['JWT_TOKEN_LOCATION'] = ['headers']
+jwt = JWTManager(app) # <-- 2. Inicializar JWT
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
@@ -9,7 +15,6 @@ from models import db, Usuario, Ticket, Comentario
 from extensions import limiter 
 from routers.auth import auth_bp
 from routers.tickets import tickets_bp
-
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ticket_user:admin123@localhost:5432/tickets_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
