@@ -29,7 +29,6 @@ export const useClient = () => {
 
   useEffect(() => {
     fetchTickets()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleCrearTicket = async (e) => {
@@ -59,7 +58,7 @@ export const useClient = () => {
 
   const cerrarSesion = () => {
     localStorage.removeItem('usuario')
-    localStorage.removeItem('token') // <-- AGREGADO: Limpiamos el token al salir
+    localStorage.removeItem('token')
     navigate('/login')
   }
 

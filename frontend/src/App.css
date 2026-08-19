@@ -1,4 +1,3 @@
-/* Reiniciamos los estilos por defecto */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -9,17 +8,15 @@ body, html, #root {
   width: 100%;
   height: 100%;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background-color: #0d1b42; /* Azul oscuro corporativo */
+  background-color: #0d1b42;
 }
 
-/* Contenedor principal de pantalla dividida */
 .landing-container {
   display: flex;
   min-height: 100vh;
   color: white;
 }
 
-/* Mitad Izquierda (Textos) */
 .left-section {
   flex: 1;
   padding: 80px;
@@ -54,7 +51,6 @@ body, html, #root {
   max-width: 90%;
 }
 
-/* Mitad Derecha (Formulario) */
 .right-section {
   flex: 1;
   padding: 80px;
@@ -172,22 +168,6 @@ body, html, #root {
   z-index: 1000;
   animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-.toast-notification.error {
-  background-color: #ef4444; 
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
 
 @media (max-width: 900px) {
   .landing-container {

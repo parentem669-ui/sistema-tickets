@@ -2,10 +2,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
-// Servicios
 import { iniciarSesion } from '../services/auth.service'
 
-// Componentes
 import AuthLayout from '../components/AuthLayout'
 import AuthForm from '../components/AuthForm'
 import FormInput from '../components/FormInput'
@@ -22,10 +20,8 @@ function Login() {
     try {
       const usuario = await iniciarSesion(email, password)
       
-      // Guardamos la info del usuario
       localStorage.setItem('usuario', JSON.stringify(usuario))
       
-      // Redirección
       navigate(usuario.rol === 'admin' || usuario.rol === 'staff' ? '/admin' : '/dashboard')
     } catch (error) {
       Swal.fire({ 

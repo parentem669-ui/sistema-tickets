@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token  # <-- IMPORTAMOS CREACIÓN DE TOKEN
+from flask_jwt_extended import create_access_token
 from models import db, Usuario
 
 auth_bp = Blueprint('auth', __name__)
@@ -40,19 +40,16 @@ def login():
     if not usuario or usuario.password != password:
         return jsonify({"error": "Credenciales inválidas"}), 401
         
-    # 1. GENERAMOS EL TOKEN CON SU ID COMO IDENTIDAD (Cadena de texto)
     token_acceso = create_access_token(identity=str(usuario.id))
 
-    # 2. SE LO ENTREGAMOS A REACT JUNTO A LOS DATOS DEL USUARIO
     return jsonify({
-        "token": token_acceso,  # <-- ESTE ES EL TOKEN QUE REACT GUARDARÁ
+        "token": token_acceso,
         "usuario": {
             "id": usuario.id,
             "nombre_completo": usuario.nombre_completo,
             "email": usuario.email,
             "rol": usuario.rol
         },
-        # Mantenemos las claves directas por si tu frontend antiguo las lee ahí:
         "id": usuario.id,
         "nombre_completo": usuario.nombre_completo,
         "email": usuario.email,

@@ -11,7 +11,6 @@ router = APIRouter(prefix="/tickets", tags=["Comentarios"])
 
 @router.post("/{ticket_id}/comentarios", response_model=schemas.ComentarioResponse)
 def agregar_comentario(ticket_id: int, comentario: schemas.ComentarioCreate, db: Session = Depends(get_db)):
-    # 1. Verificamos que el ticket exista
     ticket = db.query(models.Ticket).filter(models.Ticket.id == ticket_id).first()
     if not ticket:
         raise HTTPException(status_code=404, detail="Ticket no encontrado")
