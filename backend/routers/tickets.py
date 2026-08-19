@@ -8,14 +8,12 @@ tickets_bp = Blueprint('tickets', __name__)
 @tickets_bp.route('/tickets', methods=['GET'])
 @jwt_required()
 def obtener_tickets():
-    # 1. Extraemos la identidad del Token (ej. id del usuario)
     usuario_id_token = get_jwt_identity()
     usuario_actual = Usuario.query.get(usuario_id_token)
 
     if not usuario_actual:
         return jsonify({"error": "Usuario no encontrado"}), 404
 
-    # 2. Si es Admin/Staff, puede ver todos. Si es Cliente, SOLO los suyos.
     if usuario_actual.rol in ['admin', 'staff']:
         tickets = Ticket.query.order_by(Ticket.fecha_creacion.desc()).all()
     else:
@@ -28,7 +26,6 @@ def obtener_tickets():
 @limiter.limit("3 per minute")
 @jwt_required() 
 def crear_ticket():
-    # Asignamos la autoría desde el Token JWT para evitar suplantación
     usuario_id_token = get_jwt_identity()
     datos = request.get_json()
     
@@ -41,7 +38,7 @@ def crear_ticket():
     nuevo_ticket = Ticket(
         titulo=titulo,
         descripcion=descripcion,
-        usuario_id=usuario_id_token, # <-- Identidad garantizada
+        usuario_id=usuario_id_token,
         estado='PENDIENTE'
     )
     db.session.add(nuevo_ticket)
@@ -94,7 +91,7 @@ def agregar_comentario(id):
         
     nuevo_comentario = Comentario(
         contenido=contenido,
-        usuario_id=usuario_id_token, # <-- Identidad garantizada
+        usuario_id=usuario_id_token,
         ticket_id=ticket.id
     )
     db.session.add(nuevo_comentario)

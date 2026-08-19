@@ -55,13 +55,11 @@ body {
   padding: 0;
   width: 100%;
 }
-
-/* CORRECCIÓN DE PANTALLA COMPLETA EN #root */
 #root {
   width: 100%;
   max-width: 100%;
   margin: 0;
-  border-inline: none; /* Se quitó el borde lateral que encerraba el contenido */
+  border-inline: none;
   min-height: 100vh;
   display: flex;
   flex-direction: column;

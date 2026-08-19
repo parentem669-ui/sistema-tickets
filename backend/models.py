@@ -20,7 +20,6 @@ class Ticket(db.Model):
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     
-    # 1. Agregamos esta relación para poder acceder a los datos del usuario
     autor = db.relationship('Usuario', backref='tickets_creados')
     comentarios = db.relationship('Comentario', backref='ticket', lazy=True, cascade="all, delete-orphan")
 
@@ -31,7 +30,6 @@ class Ticket(db.Model):
             'descripcion': self.descripcion,
             'estado': self.estado,
             'usuario_id': self.usuario_id,
-            # 2. AQUÍ ESTÁ LA MAGIA: Mandamos el nombre real a React
             'cliente': self.autor.nombre_completo if self.autor else 'Desconocido', 
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
             'comentarios': [c.to_dict() for c in self.comentarios] if hasattr(self, 'comentarios') else []
@@ -46,7 +44,6 @@ class Comentario(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
 
-    # MAGIA AQUÍ: Relacionamos el comentario con el usuario que lo escribió
     autor = db.relationship('Usuario', backref='comentarios_escritos')
 
     def to_dict(self):
@@ -56,7 +53,6 @@ class Comentario(db.Model):
             'usuario_id': self.usuario_id,
             'ticket_id': self.ticket_id,
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
-            # Mandamos el objeto "usuario" completo para que React pueda leer el nombre y rol
             'usuario': {
                 'id': self.autor.id if self.autor else self.usuario_id,
                 'nombre_completo': self.autor.nombre_completo if self.autor else 'Usuario Desconocido',
