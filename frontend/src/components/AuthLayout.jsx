@@ -8,7 +8,6 @@ function AuthLayout({ children, titulo }) {
           {titulo}
         </h2>
         
-        {/* Aquí adentro se inyectará el formulario (Login o Registro) */}
         {children}
         
       </div>

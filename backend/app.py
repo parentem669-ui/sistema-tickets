@@ -1,13 +1,13 @@
 from flask import Flask
 from flask_cors import CORS
-from flask_jwt_extended import JWTManager # <-- 1. Importar JWT
+from flask_jwt_extended import JWTManager 
 
 app = Flask(__name__)
 
-# Configuración JWT (Evita el error KeyError)
+
 app.config['JWT_SECRET_KEY'] = 'clave-secreta-tickets'
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
-jwt = JWTManager(app) # <-- 2. Inicializar JWT
+jwt = JWTManager(app) 
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 

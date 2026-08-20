@@ -21,7 +21,7 @@ function Dashboard() {
   return (
     <div style={{ backgroundColor: '#0f172a', minHeight: '100vh', padding: '40px', fontFamily: 'sans-serif' }}>
       
-      {/* Pasamos el usuario procesado garantizando que tenga la propiedad nombre disponible */}
+      
       <ClientHeader usuarioActual={usuarioProcesado} cerrarSesion={cerrarSesion} />
 
       <div style={{ display: 'flex', gap: '30px', alignItems: 'flex-start' }}>
