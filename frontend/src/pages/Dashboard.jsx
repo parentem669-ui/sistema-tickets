@@ -1,4 +1,4 @@
-import { useClient } from '../hooks/useClient'
+import { useClient } from '../Hooks/useClient'
 import { formatearFecha } from '../utils/helpers'
 
 import ClientHeader from '../components/ClientHeader'
