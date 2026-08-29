@@ -1,72 +1,53 @@
 import React, { useState } from 'react'
 import { useAdmin } from '../Hooks/useAdmin' 
-import AdminHeader from '../components/AdminHeader'
+import AdminLayout from '../components/AdminLayout'
+import AdminTabs from '../components/AdminTabs'
 import AdminTable from '../components/AdminTable'
+import ChatModal from '../components/ChatModal'
 import { formatearFecha } from '../utils/helpers'
 
 function AdminDashboard() {
-  const { tickets, actualizarEstado, eliminarTicket, cerrarSesion } = useAdmin()
+  const { 
+    tickets, cambiarEstado, handleEliminarTicket, cerrarSesion, 
+    ticketChat, setTicketChat, nuevoComentario, setNuevoComentario, enviarComentario
+  } = useAdmin()
 
   const [pestanaActiva, setPestanaActiva] = useState('activos')
 
   const ticketsActivos = tickets.filter(ticket => ticket.estado !== 'CERRADO')
   const ticketsHistorial = tickets.filter(ticket => ticket.estado === 'CERRADO')
-
   const ticketsAMostrar = pestanaActiva === 'activos' ? ticketsActivos : ticketsHistorial
 
   return (
-    <div style={{ backgroundColor: '#0f172a', minHeight: '100vh', padding: '40px', fontFamily: 'sans-serif' }}>
-      
-      <AdminHeader cerrarSesion={cerrarSesion} />
-
-      <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '16px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ margin: '0 0 20px 0', color: '#1e293b' }}>Gestión de Requerimientos</h2>
-
-        <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '2px solid #e2e8f0', paddingBottom: '10px' }}>
-          <button 
-            onClick={() => setPestanaActiva('activos')}
-            style={{
-              padding: '10px 20px',
-              border: 'none',
-              backgroundColor: 'transparent',
-              fontSize: '16px',
-              fontWeight: pestanaActiva === 'activos' ? 'bold' : 'normal',
-              color: pestanaActiva === 'activos' ? '#6366f1' : '#64748b',
-              borderBottom: pestanaActiva === 'activos' ? '3px solid #6366f1' : 'none',
-              cursor: 'pointer',
-              marginBottom: '-12px'
-            }}
-          >
-            🚀 Cola Activa ({ticketsActivos.length})
-          </button>
-          
-          <button 
-            onClick={() => setPestanaActiva('historial')}
-            style={{
-              padding: '10px 20px',
-              border: 'none',
-              backgroundColor: 'transparent',
-              fontSize: '16px',
-              fontWeight: pestanaActiva === 'historial' ? 'bold' : 'normal',
-              color: pestanaActiva === 'historial' ? '#10b981' : '#64748b',
-              borderBottom: pestanaActiva === 'historial' ? '3px solid #10b981' : 'none',
-              cursor: 'pointer',
-              marginBottom: '-12px'
-            }}
-          >
-            📁 Historial Cerrados ({ticketsHistorial.length})
-          </button>
-        </div>
+    <>
+      <AdminLayout cerrarSesion={cerrarSesion}>
+        
+        <AdminTabs 
+          pestanaActiva={pestanaActiva} 
+          setPestanaActiva={setPestanaActiva} 
+          conteoActivos={ticketsActivos.length} 
+          conteoCerrados={ticketsHistorial.length} 
+        />
 
         <AdminTable 
           tickets={ticketsAMostrar} 
-          actualizarEstado={actualizarEstado}
-          eliminarTicket={eliminarTicket}
-          formatearFecha={formatearFecha} // <-- AQUÍ SE LA PASAMOS A LA TABLA
+          cambiarEstado={cambiarEstado} 
+          setTicketChat={setTicketChat}    
+          handleEliminarTicket={handleEliminarTicket} 
+          formatearFecha={formatearFecha} 
         /> 
 
-      </div>
-    </div>
+      </AdminLayout>
+
+      <ChatModal 
+        ticketChat={ticketChat} 
+        setTicketChat={setTicketChat} 
+        nuevoComentario={nuevoComentario} 
+        setNuevoComentario={setNuevoComentario} 
+        enviarComentario={enviarComentario} 
+        formatearFecha={formatearFecha} 
+      />
+    </>
   )
 }
 
