@@ -4,12 +4,10 @@ function AdminTable({ tickets, cambiarEstado, setTicketChat, handleEliminarTicke
   const [paginaActual, setPaginaActual] = useState(1)
   const ticketsPorPagina = 5
 
-  // Si cambiamos de pestaña (activos/historial) regresamos a la página 1
   useEffect(() => {
     setPaginaActual(1)
   }, [tickets])
 
-  // Lógica para cortar la lista de tickets
   const indiceUltimoTicket = paginaActual * ticketsPorPagina
   const indicePrimerTicket = indiceUltimoTicket - ticketsPorPagina
   const ticketsActuales = tickets.slice(indicePrimerTicket, indiceUltimoTicket)
@@ -33,11 +31,12 @@ function AdminTable({ tickets, cambiarEstado, setTicketChat, handleEliminarTicke
             </tr>
           </thead>
           <tbody>
-            {/* AQUÍ ESTÁ EL TRUCO: Mapeamos 'ticketsActuales' en lugar de 'tickets' */}
             {ticketsActuales.map(ticket => (
               <tr key={ticket.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                 <td style={{ padding: '12px', fontWeight: 'bold', color: '#6366f1' }}>#{ticket.id}</td>
-                <td style={{ padding: '12px', fontWeight: 'bold' }}>{ticket.nombre_cliente}</td>
+                <td style={{ padding: '12px', fontWeight: 'bold' }}>
+                  {ticket.cliente || ticket.nombre_cliente || 'Desconocido'}
+                </td>
                 <td style={{ padding: '12px' }}>
                   <div style={{ fontWeight: 'bold' }}>{ticket.titulo}</div>
                   <div style={{ fontSize: '12px', color: '#64748b' }}>{ticket.descripcion}</div>
@@ -79,7 +78,6 @@ function AdminTable({ tickets, cambiarEstado, setTicketChat, handleEliminarTicke
         </table>
       </div>
 
-      {/* CONTROLES DE PAGINACIÓN */}
       {totalPaginas > 1 && (
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px', paddingTop: '10px', borderTop: '1px solid #e2e8f0' }}>
           <button 

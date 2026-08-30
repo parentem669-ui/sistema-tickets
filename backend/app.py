@@ -4,12 +4,16 @@ from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 
-
 app.config['JWT_SECRET_KEY'] = 'clave-secreta-tickets'
 app.config['JWT_TOKEN_LOCATION'] = ['headers']
 jwt = JWTManager(app) 
 
-CORS(app, resources={r"/*": {"origins": "*"}})
+# Configuración explícita de CORS para habilitar cabeceras y métodos preflight (OPTIONS)
+CORS(app, resources={r"/*": {
+    "origins": "*",
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"]
+}})
 
 from models import db, Usuario, Ticket, Comentario
 from extensions import limiter 

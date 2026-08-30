@@ -20,19 +20,19 @@ class Ticket(db.Model):
     fecha_creacion = db.Column(db.DateTime, default=datetime.utcnow)
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     
-    
     autor = db.relationship('Usuario', backref='tickets_creados')
     comentarios = db.relationship('Comentario', backref='ticket', lazy=True, cascade="all, delete-orphan")
 
     def to_dict(self):
+        nombre = self.autor.nombre_completo if self.autor else 'Desconocido'
         return {
             'id': self.id,
             'titulo': self.titulo,
             'descripcion': self.descripcion,
             'estado': self.estado,
             'usuario_id': self.usuario_id,
-            
-            'cliente': self.autor.nombre_completo if self.autor else 'Desconocido', 
+            'cliente': nombre,
+            'nombre_cliente': nombre,
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
             'comentarios': [c.to_dict() for c in self.comentarios] if hasattr(self, 'comentarios') else []
         }
@@ -46,7 +46,6 @@ class Comentario(db.Model):
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     ticket_id = db.Column(db.Integer, db.ForeignKey('tickets.id'), nullable=False)
 
-    
     autor = db.relationship('Usuario', backref='comentarios_escritos')
 
     def to_dict(self):
@@ -56,7 +55,6 @@ class Comentario(db.Model):
             'usuario_id': self.usuario_id,
             'ticket_id': self.ticket_id,
             'fecha_creacion': self.fecha_creacion.isoformat() if self.fecha_creacion else None,
-            
             'usuario': {
                 'id': self.autor.id if self.autor else self.usuario_id,
                 'nombre_completo': self.autor.nombre_completo if self.autor else 'Usuario Desconocido',

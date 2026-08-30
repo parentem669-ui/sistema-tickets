@@ -1,10 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import Landing from './pages/Landing'
-import Login from './pages/Login'
-import Registro from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import AdminDashboard from './pages/AdminDashboard'
-
 
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -13,11 +10,10 @@ function App() {
     <Router>
       <Routes>
         
+        {/* Ruta pública principal con los modales integrados */}
         <Route path="/" element={<Landing />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registro" element={<Registro />} />
 
-        
+        {/* Ruta protegida para Clientes */}
         <Route 
           path="/dashboard" 
           element={
@@ -27,7 +23,7 @@ function App() {
           } 
         />
 
-        
+        {/* Ruta protegida para Administradores */}
         <Route 
           path="/admin" 
           element={
@@ -36,6 +32,10 @@ function App() {
             </ProtectedRoute>
           } 
         />
+
+        {/* Redirección: Si alguien escribe una URL rara, lo manda al Landing */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+
       </Routes>
     </Router>
   )

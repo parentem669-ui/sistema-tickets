@@ -1,21 +1,28 @@
-import { Link } from 'react-router-dom'
+import React from 'react';
 
-function Navbar() {
+function Navbar({ openModal }) {
   return (
-    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', backgroundColor: '#0f172a', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-      <div style={{ color: 'white', fontSize: '24px', fontWeight: 'bold' }}>
+    <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid #1e293b' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white', fontSize: '20px', fontWeight: 'bold' }}>
         🎟️ HelpDesk
       </div>
-      <div style={{ display: 'flex', gap: '15px' }}>
-        <Link to="/login" style={{ color: '#f8fafc', textDecoration: 'none', fontWeight: 'bold', padding: '8px 16px' }}>
+      
+      <div style={{ display: 'flex', gap: '20px' }}>
+        <button 
+          onClick={() => openModal('login')}
+          style={{ backgroundColor: 'transparent', color: 'white', border: 'none', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}
+        >
           Iniciar Sesión
-        </Link>
-        <Link to="/registro" style={{ backgroundColor: '#6366f1', color: 'white', textDecoration: 'none', fontWeight: 'bold', padding: '8px 16px', borderRadius: '6px' }}>
+        </button>
+        <button 
+          onClick={() => openModal('register')}
+          style={{ backgroundColor: '#6366f1', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px', transition: 'background 0.3s' }}
+        >
           Registrarse
-        </Link>
+        </button>
       </div>
     </nav>
-  )
+  );
 }
 
-export default Navbar
+export default Navbar;
