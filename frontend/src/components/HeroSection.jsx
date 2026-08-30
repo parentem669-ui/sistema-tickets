@@ -2,28 +2,102 @@ import React from 'react';
 
 function HeroSection({ openModal }) {
   return (
-    <main style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '0 20px', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ 
+      maxWidth: '1000px', 
+      margin: '0 auto', 
+      padding: '60px 20px', 
+      textAlign: 'center',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      gap: '24px'
+    }}>
       
-      {/* Efecto de brillo de fondo */}
-      <div style={{ position: 'absolute', top: '20%', left: '50%', transform: 'translate(-50%, -50%)', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, rgba(15,23,42,0) 70%)', zIndex: 0, pointerEvents: 'none' }}></div>
+      {/* Badge superior estilo SaaS moderna */}
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '8px',
+        padding: '6px 16px',
+        borderRadius: '9999px',
+        backgroundColor: 'rgba(99, 102, 241, 0.1)',
+        border: '1px solid rgba(99, 102, 241, 0.3)',
+        color: '#818cf8',
+        fontSize: '14px',
+        fontWeight: '500',
+        backdropFilter: 'blur(8px)',
+        boxShadow: '0 0 20px rgba(99, 102, 241, 0.2)'
+      }}>
+        <span style={{ fontSize: '10px' }}>⚡</span> Plataforma de Gestión v2.0
+      </div>
 
-      <div style={{ zIndex: 1, maxWidth: '800px' }}>
-        <h1 style={{ color: 'white', fontSize: '3.5rem', marginBottom: '20px', lineHeight: '1.2' }}>
-          Sistema de Soporte Técnico <span style={{ color: '#6366f1' }}>Profesional</span>
-        </h1>
-        
-        <p style={{ color: '#94a3b8', fontSize: '1.2rem', marginBottom: '40px', lineHeight: '1.6' }}>
-          Gestiona tus requerimientos, comunícate en tiempo real con nuestro equipo y resuelve tus problemas de manera rápida y eficiente sin salir de esta pantalla.
-        </p>
+      {/* Título Principal Impactante */}
+      <h1 style={{ 
+        fontSize: 'clamp(2.5rem, 6vw, 4.2rem)', 
+        fontWeight: '800', 
+        color: '#ffffff', 
+        lineHeight: '1.1',
+        letterSpacing: '-0.02em',
+        margin: 0,
+        textShadow: '0 10px 30px rgba(0,0,0,0.5)'
+      }}>
+        Sistema de Soporte Técnico{' '}
+        <span style={{ 
+          background: 'linear-gradient(135deg, #a5b4fc 0%, #6366f1 50%, #c084fc 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          display: 'inline-block'
+        }}>
+          Profesional
+        </span>
+      </h1>
 
-        <button 
+      {/* Subtítulo legible con tarjeta translucida */}
+      <p style={{ 
+        fontSize: '1.15rem', 
+        color: '#cbd5e1', 
+        maxWidth: '680px', 
+        lineHeight: '1.6',
+        margin: '0 auto',
+        fontWeight: '400',
+        textShadow: '0 2px 4px rgba(0,0,0,0.8)'
+      }}>
+        Gestiona tus requerimientos, comunícate en tiempo real con nuestro equipo y resuelve tus problemas de manera rápida y eficiente sin salir de esta pantalla.
+      </p>
+
+      {/* Botón de Acción Principal con Glow y Hover */}
+      <div style={{ marginTop: '12px' }}>
+        <button
           onClick={() => openModal('register')}
-          style={{ backgroundColor: '#6366f1', color: 'white', border: 'none', padding: '15px 35px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem', boxShadow: '0 4px 14px 0 rgba(99,102,241,0.39)', transition: 'transform 0.2s' }}
+          style={{
+            padding: '16px 36px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            color: '#ffffff',
+            background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            cursor: 'pointer',
+            boxShadow: '0 0 25px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+            transition: 'all 0.3s ease',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '10px'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 0 35px rgba(99, 102, 241, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 0 25px rgba(99, 102, 241, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2)';
+          }}
         >
           Comenzar Ahora 🚀
         </button>
       </div>
-    </main>
+
+    </section>
   );
 }
 
