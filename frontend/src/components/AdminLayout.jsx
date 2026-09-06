@@ -1,14 +1,23 @@
 import React from 'react'
 import AdminHeader from './AdminHeader'
 
-function AdminLayout({ children, cerrarSesion }) {
+function AdminLayout({ children, usuarioActual, cerrarSesion }) {
   return (
-    <div style={{ backgroundColor: '#0f172a', minHeight: '100vh', padding: '40px', fontFamily: 'sans-serif' }}>
+    <div style={{ padding: '20px 40px', width: '100%', boxSizing: 'border-box' }}>
       
-      <AdminHeader cerrarSesion={cerrarSesion} />
+      {/* Header Estilizado con Menú Flotante */}
+      <AdminHeader usuarioActual={usuarioActual} cerrarSesion={cerrarSesion} />
 
-      <div style={{ backgroundColor: 'white', padding: '30px', borderRadius: '16px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-        <h2 style={{ margin: '0 0 20px 0', color: '#1e293b' }}>Gestión de Requerimientos</h2>
+      <div style={{ marginTop: '30px' }}>
+        <h2 style={{ 
+          margin: '0 0 20px 0', 
+          color: '#f8fafc', 
+          fontSize: '24px', 
+          fontWeight: '600',
+          letterSpacing: '-0.5px'
+        }}>
+          Gestión de Requerimientos
+        </h2>
         
         {children}
         

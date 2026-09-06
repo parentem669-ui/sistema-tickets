@@ -2,39 +2,69 @@ import React from 'react'
 
 function AdminTabs({ pestanaActiva, setPestanaActiva, conteoActivos, conteoCerrados }) {
   return (
-    <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', borderBottom: '2px solid #e2e8f0', paddingBottom: '10px' }}>
+    <div style={{ 
+      display: 'flex', 
+      gap: '20px', 
+      marginBottom: '24px', 
+      borderBottom: '1px solid rgba(255, 255, 255, 0.1)', 
+      paddingBottom: '0px' 
+    }}>
       <button 
         onClick={() => setPestanaActiva('activos')}
         style={{
-          padding: '10px 20px',
+          padding: '12px 16px',
           border: 'none',
           backgroundColor: 'transparent',
-          fontSize: '16px',
-          fontWeight: pestanaActiva === 'activos' ? 'bold' : 'normal',
-          color: pestanaActiva === 'activos' ? '#6366f1' : '#64748b',
-          borderBottom: pestanaActiva === 'activos' ? '3px solid #6366f1' : 'none',
+          fontSize: '15px',
+          fontWeight: pestanaActiva === 'activos' ? '600' : '500',
+          color: pestanaActiva === 'activos' ? '#818cf8' : '#94a3b8',
+          borderBottom: pestanaActiva === 'activos' ? '3px solid #818cf8' : '3px solid transparent',
           cursor: 'pointer',
-          marginBottom: '-12px'
+          transition: 'all 0.2s ease',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
         }}
       >
-        🚀 Cola Activa ({conteoActivos})
+        <span>🚀</span> Cola Activa 
+        <span style={{ 
+          backgroundColor: pestanaActiva === 'activos' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255,255,255,0.05)', 
+          color: pestanaActiva === 'activos' ? '#a5b4fc' : '#64748b',
+          padding: '2px 8px', 
+          borderRadius: '12px', 
+          fontSize: '12px' 
+        }}>
+          {conteoActivos}
+        </span>
       </button>
       
       <button 
         onClick={() => setPestanaActiva('historial')}
         style={{
-          padding: '10px 20px',
+          padding: '12px 16px',
           border: 'none',
           backgroundColor: 'transparent',
-          fontSize: '16px',
-          fontWeight: pestanaActiva === 'historial' ? 'bold' : 'normal',
-          color: pestanaActiva === 'historial' ? '#10b981' : '#64748b',
-          borderBottom: pestanaActiva === 'historial' ? '3px solid #10b981' : 'none',
+          fontSize: '15px',
+          fontWeight: pestanaActiva === 'historial' ? '600' : '500',
+          color: pestanaActiva === 'historial' ? '#34d399' : '#94a3b8',
+          borderBottom: pestanaActiva === 'historial' ? '3px solid #34d399' : '3px solid transparent',
           cursor: 'pointer',
-          marginBottom: '-12px'
+          transition: 'all 0.2s ease',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
         }}
       >
-        📁 Historial Cerrados ({conteoCerrados})
+        <span>📁</span> Historial Cerrados 
+        <span style={{ 
+          backgroundColor: pestanaActiva === 'historial' ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.05)', 
+          color: pestanaActiva === 'historial' ? '#6ee7b7' : '#64748b',
+          padding: '2px 8px', 
+          borderRadius: '12px', 
+          fontSize: '12px' 
+        }}>
+          {conteoCerrados}
+        </span>
       </button>
     </div>
   )

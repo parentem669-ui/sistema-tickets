@@ -1,15 +1,80 @@
+import React from 'react'
+
 function TicketForm({ titulo, setTitulo, descripcion, setDescripcion, manejarSubmit }) {
   return (
-    <div style={{ flex: '1', backgroundColor: 'white', borderRadius: '12px', padding: '24px', color: '#333', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
-      <h3 style={{ margin: '0 0 20px 0', fontSize: '18px' }}>Crear un nuevo ticket</h3>
-      <form onSubmit={manejarSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-        <input type="text" placeholder="Ej. Mi pantalla no enciende" value={titulo} onChange={e => setTitulo(e.target.value)} required style={{ padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '14px' }} />
-        <textarea placeholder="Describe tu problema con más detalle..." value={descripcion} onChange={e => setDescripcion(e.target.value)} required rows="4" style={{ padding: '12px', borderRadius: '8px', border: '1px solid #cbd5e1', outline: 'none', fontSize: '14px', resize: 'vertical' }} />
-        <button type="submit" style={{ backgroundColor: '#6366f1', color: 'white', padding: '12px', borderRadius: '8px', border: 'none', fontWeight: 'bold', cursor: 'pointer', marginTop: '5px' }}>
-          Enviar Requerimiento
-        </button>
-      </form>
-    </div>
+    <form onSubmit={manejarSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <label style={{ fontSize: '14px', color: '#cbd5e1', fontWeight: '500' }}>Asunto del requerimiento</label>
+        <input 
+          type="text" 
+          placeholder="Ej. Mi pantalla no enciende..." 
+          value={titulo} 
+          onChange={e => setTitulo(e.target.value)} 
+          required 
+          style={{ 
+            padding: '14px', 
+            borderRadius: '12px', 
+            border: '1px solid rgba(255, 255, 255, 0.1)', 
+            backgroundColor: 'rgba(15, 23, 42, 0.6)', 
+            color: '#f8fafc', 
+            outline: 'none', 
+            fontSize: '15px',
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)'
+          }} 
+        />
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        <label style={{ fontSize: '14px', color: '#cbd5e1', fontWeight: '500' }}>Descripción detallada</label>
+        <textarea 
+          placeholder="Describe tu problema con la mayor cantidad de detalles posible..." 
+          value={descripcion} 
+          onChange={e => setDescripcion(e.target.value)} 
+          required 
+          rows="5" 
+          style={{ 
+            padding: '14px', 
+            borderRadius: '12px', 
+            border: '1px solid rgba(255, 255, 255, 0.1)', 
+            backgroundColor: 'rgba(15, 23, 42, 0.6)', 
+            color: '#f8fafc', 
+            outline: 'none', 
+            fontSize: '15px', 
+            resize: 'vertical', 
+            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.1)'
+          }} 
+        />
+      </div>
+
+      <button 
+        type="submit" 
+        style={{ 
+          background: 'linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)', 
+          color: 'white', 
+          padding: '14px', 
+          borderRadius: '12px', 
+          border: 'none', 
+          fontWeight: '600', 
+          cursor: 'pointer', 
+          marginTop: '10px', 
+          fontSize: '16px',
+          boxShadow: '0 4px 15px rgba(99, 102, 241, 0.4)',
+          transition: 'transform 0.2s, box-shadow 0.2s'
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.transform = 'translateY(-2px)'
+          e.currentTarget.style.boxShadow = '0 6px 20px rgba(99, 102, 241, 0.6)'
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)'
+          e.currentTarget.style.boxShadow = '0 4px 15px rgba(99, 102, 241, 0.4)'
+        }}
+      >
+        Enviar Requerimiento
+      </button>
+    </form>
   )
 }
+
 export default TicketForm
